@@ -17,7 +17,7 @@ var initStream = function () {
     ws.addEventListener('message',function(message){
         
         if(data.length>20){
-            data.pop();
+            data.shift();
         }
 
         data.push(message.data)
@@ -25,18 +25,18 @@ var initStream = function () {
     })
     
     registerStream();
+    $('#startStream')[0].disabled = true;
     
 };
 
 
 var registerStream = function(){
 
-    /*$.ajax({
+    $.ajax({
         url:rspAddress,
         method:'PUT',
         headers:{
             "Cache":"no-cache",
-            "Access-Control-Allow-Origin":"*"
         },
         data:{
             "streamIri":sgraphAddress
@@ -46,12 +46,13 @@ var registerStream = function(){
         $('#response').html(response);
     })
     .fail(function( jqXHR, textStatus){
+        console.log(jqXHR)
         var error = "Error: " +textStatus+"\nPlease raise you hand and wait for a tutor";
         $('#response').html(error);
 
-    })*/
+    })
 
-    var xhr = new XMLHttpRequest();
+    /*var xhr = new XMLHttpRequest();
     xhr.open('PUT', rspAddress, true);
     xhr.setRequestHeader( "Cache", "no-cache" );
     xhr.send({ streamIri: sgraphAddress });
@@ -66,7 +67,7 @@ var registerStream = function(){
 
 
         }
-    };
+    };*/
 }
 
 

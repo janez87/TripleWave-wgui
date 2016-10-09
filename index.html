@@ -15,7 +15,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="jquery.ajax-cross-origin.min.js"></script>
 
     
 </head>
@@ -59,7 +59,7 @@
                 <div class="input-group">
                     <input id="twUrl" type="text" class="form-control" placeholder="TripleWave URL." value="ws://131.175.141.249/TripleWave-transform/ws/stream">
                     <span class="input-group-btn">
-                        <button onclick="initStream()" class="btn btn-default" type="button">Start Stream</button>
+                        <button id="startStream" onclick="initStream()" class="btn btn-default" type="button">Start Stream</button>
                     </span>
                 </div>
             </div>
