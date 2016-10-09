@@ -1,95 +1,90 @@
 
 var rspAddress = "http://localhost:8175/streams";
-var queryAddress = "";
+var queryAddress = "http://localhost:8175/queries";
 var sgraphAddress = "http://131.175.141.249/TripleWave-transform/sgraph";
 
 var initStream = function () {
     var data = [];
 
-
-    //var twAddress = "ws://131.175.141.249/TripleWave-transform/ws/stream";
-    //var twAddress = "ws://131.175.141.249/TripleWave-new/primus";
-
     var twAddress = $('#twUrl')[0].value;
     var ws = new WebSocket(twAddress);
 
     var $stream = $('#stream');
-    ws.addEventListener('message',function(message){
-        
-        if(data.length>20){
+    ws.addEventListener('message', function (message) {
+
+        if (data.length > 20) {
             data.shift();
         }
 
         data.push(message.data)
-        $stream[0].value=data.join('\n');
+        $stream[0].value = data.join('\n');
     })
-    
+
     registerStream();
     $('#startStream')[0].disabled = true;
-    
+
 };
 
 
-var registerStream = function(){
+var registerStream = function () {
 
     $.ajax({
-        url:rspAddress,
-        method:'PUT',
-        headers:{
-            "Cache":"no-cache",
+        url: rspAddress,
+        method: 'PUT',
+        headers: {
+            "Cache": "no-cache",
         },
-        data:{
-            "streamIri":sgraphAddress
+        data: {
+            "streamIri": sgraphAddress
         }
     })
-    .done(function(response){
-        $('#response').html(response);
-    })
-    .fail(function( jqXHR, textStatus){
-        console.log(jqXHR)
-        var error = "Error: " +textStatus+"\nPlease raise you hand and wait for a tutor";
-        $('#response').html(error);
-
-    })
-
-    /*var xhr = new XMLHttpRequest();
-    xhr.open('PUT', rspAddress, true);
-    xhr.setRequestHeader( "Cache", "no-cache" );
-    xhr.send({ streamIri: sgraphAddress });
-
-    xhr.onreadystatechange = function(){
-         if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) { 
-             console.log(xhr.responseText); 
-              $('#response').html(xhr.responseText);
-        }else if(xhr.status !== 200){
-            var error = "Error: " +xhr.responseText +','+ xhr.status +"\nPlease raise you hand and wait for a tutor";
+        .done(function (response) {
+            $('#response').html(response);
+        })
+        .fail(function (jqXHR, textStatus) {
+            console.log(jqXHR)
+            var error = "Error: " + jqXHR.responseText + "\nPlease raise you hand and wait for us";
             $('#response').html(error);
 
+        })
 
-        }
-    };*/
+    $('#response').html("Registering the stream..");
+
 }
 
 
-var registerQuery = function(){
-    var queryName = "";
-    
-    $.ajax({
-        url:queryAddress,
-        method:'PUT',
-        headers:{
-            "Cache":"no-cache"
-        },
-        data:{
-            "queryName":queryName
-        }
-    })
-    .done(function(response){
-        $('#response').html(response);
-    })
-    .fail(function( jqXHR, textStatus){
-        var error = "Error: " +textStatus+"\nPlease raise you hand and wait for a tutor";
-        $('#response').html(error);
+var registerQuery = function () {
+    var queryName = "topUserWiki";
 
-    })
+    var queryContent = "REGISTER QUERY topUserWiki AS " +
+        "PREFIX prov:<http://www.w3.org/ns/prov#> " +
+        "PREFIX sc:<https://schema.org/> " +
+        "SELECT ?agent (COUNT(?t) AS ?c) " +
+        "FROM STREAM <http://131.175.141.249/TripleWave-transform/sgraph> [RANGE 1m STEP 1m] " +
+        "WHERE { " +
+        "?t sc:agent ?agent " +
+        "} " +
+        "GROUP BY ?agent " +
+        "ORDER BY desc(?c) " +
+        "LIMIT 15";
+
+
+    $.ajax({
+        url: queryAddress + '/' + queryName,
+        method: 'PUT',
+        headers: {
+            "Cache": "no-cache"
+        },
+        data: queryContent
+        })
+        .done(function (response) {
+            $('#response').html(response);
+        })
+        .fail(function (jqXHR, textStatus) {
+            var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
+            $('#response').html(error);
+
+        })
+    $('#query').html(queryContent);
+
 }

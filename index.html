@@ -15,8 +15,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 
-    <script src="jquery.ajax-cross-origin.min.js"></script>
-
     
 </head>
 
@@ -55,7 +53,7 @@
                 <h3> TripleWave Stream</h3>
                 <textarea id="stream">
                 </textarea>
-                <h5> TripleWave Address</h5>
+                <h5> TripleWave Websocket Address</h5>
                 <div class="input-group">
                     <input id="twUrl" type="text" class="form-control" placeholder="TripleWave URL." value="ws://131.175.141.249/TripleWave-transform/ws/stream">
                     <span class="input-group-btn">
@@ -75,7 +73,7 @@
                 <h3> Write your query</h3>
                 <div class="form-group">
                     <textarea class="form-control" rows="5" id="query"></textarea>
-                    <button onclick="initStream()" class="btn btn-default" type="button">Send Query</button>
+                    <button onclick="registerQuery()" class="btn btn-default" type="button">Register Query</button>
                 </div>
             </div>
         </div>
