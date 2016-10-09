@@ -1,5 +1,5 @@
 
-var rspAddress = "";
+var rspAddress = "http://localhost:8175/streams";
 var queryAddress = "";
 var sgraphAddress = "http://131.175.141.249/TripleWave-transform/sgraph";
 
@@ -31,11 +31,12 @@ var initStream = function () {
 
 var registerStream = function(){
 
-    $.ajax({
+    /*$.ajax({
         url:rspAddress,
         method:'PUT',
         headers:{
-            "Cache":"no-cache"
+            "Cache":"no-cache",
+            "Access-Control-Allow-Origin":"*"
         },
         data:{
             "streamIri":sgraphAddress
@@ -48,7 +49,24 @@ var registerStream = function(){
         var error = "Error: " +textStatus+"\nPlease raise you hand and wait for a tutor";
         $('#response').html(error);
 
-    })
+    })*/
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', rspAddress, true);
+    xhr.setRequestHeader( "Cache", "no-cache" );
+    xhr.send({ streamIri: sgraphAddress });
+
+    xhr.onreadystatechange = function(){
+         if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) { 
+             console.log(xhr.responseText); 
+              $('#response').html(xhr.responseText);
+        }else if(xhr.status !== 200){
+            var error = "Error: " +xhr.responseText +','+ xhr.status +"\nPlease raise you hand and wait for a tutor";
+            $('#response').html(error);
+
+
+        }
+    };
 }
 
 
