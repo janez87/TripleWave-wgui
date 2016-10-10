@@ -63,7 +63,7 @@ var registerQuery = function () {
         "PREFIX prov:<http://www.w3.org/ns/prov#> " +
         "PREFIX sc:<https://schema.org/> " +
         "SELECT ?agent (COUNT(?t) AS ?c) " +
-        "FROM STREAM <http://131.175.141.249/TripleWave-transform/sgraph> [RANGE 1m STEP 1m] " +
+        "FROM STREAM <http://131.175.141.249/TripleWave-transform/sgraph> [RANGE 10s STEP 10s] " +
         "WHERE { " +
         "?t sc:agent ?agent " +
         "} " +

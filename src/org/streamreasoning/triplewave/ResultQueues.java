@@ -24,7 +24,7 @@ public class ResultQueues {
 	
 	public void addResult(String key, String e){
 		if(!queues.containsKey(key)){
-			logger.debug("It is the first invocation for {}, creating the new queue");
+			logger.debug("It is the first invocation for {}, creating the new queue", key);
 			createQueue(key);
 		}
 		queues.get(key).add(e);
