@@ -1,7 +1,9 @@
 
 var rspAddress = "http://localhost:8175/streams";
 var queryAddress = "http://localhost:8175/queries";
+var observeryAddress = "http://localhost:8175/observer";
 var sgraphAddress = "http://131.175.141.249/TripleWave-transform/sgraph";
+var observerCallback = "http://localhost:8080/ResultWriter"
 
 var initStream = function () {
     var data = [];
@@ -79,6 +81,26 @@ var registerQuery = function () {
         })
         .done(function (response) {
             $('#response').html(response);
+            
+            console.log(response)
+            
+            $.ajax({
+            	url:response,
+            	method:'POST',
+            	headers: {
+                    "Cache": "no-cache",
+                    "content-type": "text/plain"
+                },
+                data:observerCallback+'/'+queryName
+            })
+            .done(function(response){
+            	 $('#response').html(response);
+            })
+            .fail(function (jqXHR, textStatus) {
+	            var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
+	            $('#response').html(error);
+
+            })    
         })
         .fail(function (jqXHR, textStatus) {
             var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
