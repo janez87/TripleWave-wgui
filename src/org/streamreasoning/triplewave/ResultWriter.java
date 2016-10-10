@@ -1,6 +1,8 @@
 package org.streamreasoning.triplewave;
 
 import java.io.IOException;
+import java.util.Scanner;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +21,10 @@ public class ResultWriter extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String key = request.getPathInfo().substring(1);
-		String value = request.getQueryString();
+		Scanner s = new Scanner(request.getInputStream());
+		String value = s.next();
+		s.close();
+		
 		logger.debug("A new value for {} has to be inserted: {}", key, value);
 		
 		String body = request.getReader().readLine();
