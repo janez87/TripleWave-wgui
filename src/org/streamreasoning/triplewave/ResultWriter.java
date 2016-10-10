@@ -24,7 +24,7 @@ public class ResultWriter extends HttpServlet {
 		
 		String body = request.getReader().readLine();
 		logger.debug("A new value for {} ",body);
-		ResultQueues.getInstance().addResult(key, value);
+		ResultQueues._INSTANCE.addResult(key, value);
 		doGet(request, response);
 	}
 
