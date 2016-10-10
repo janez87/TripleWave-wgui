@@ -3,7 +3,8 @@ var rspAddress = "http://localhost:8175/streams";
 var queryAddress = "http://localhost:8175/queries";
 var observeryAddress = "http://localhost:8175/observer";
 var sgraphAddress = "http://131.175.141.249/TripleWave-transform/sgraph";
-var observerCallback = "http://localhost:8080/ResultWriter"
+var observerCallback = "http://localhost:8080/triplewave-wgui/ResultWriter"
+var resultUrl = "http://localhost:8080/triplewave-wgui/ResultReader"
 
 var initStream = function () {
     var data = [];
@@ -108,4 +109,20 @@ var registerQuery = function () {
         })
     $('#query').html(queryContent);
 
+}
+
+var getResults = function(){
+	
+	$.ajax({
+		url:resultUrl+'?key=topUserWiki',
+		method:'GET'
+	})
+	.done(function(response){
+		$('#response').html(response);
+	})
+	.fail(function (jqXHR, textStatus) {
+            var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
+            $('#response').html(error);
+
+     })
 }

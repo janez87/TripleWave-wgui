@@ -12,10 +12,18 @@ public class ResultQueues {
 	private Map<String, Queue<String>> queues;
 	private static final Logger logger = LoggerFactory.getLogger(ResultQueues.class); 
 	
-	public final static ResultQueues _INSTANCE =  new ResultQueues();
+	private static ResultQueues _INSTANCE;
+	
 	
 	private ResultQueues(){
 		queues = new HashMap<String, Queue<String>>();
+	}
+	
+	public static ResultQueues getInstance(){
+		if(_INSTANCE==null){
+			_INSTANCE = new ResultQueues();
+		}
+		return _INSTANCE;
 	}
 	
 	public void createQueue(String key){
@@ -27,7 +35,7 @@ public class ResultQueues {
 			logger.debug("It is the first invocation for {}, creating the new queue");
 			createQueue(key);
 		}
-		queues.get(e).add(e);
+		queues.get(key).add(e);
 	}
 	
 	public String pull(String key){

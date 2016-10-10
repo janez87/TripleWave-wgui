@@ -21,7 +21,10 @@ public class ResultWriter extends HttpServlet {
 		String key = request.getPathInfo().substring(1);
 		String value = request.getQueryString();
 		logger.debug("A new value for {} has to be inserted: {}", key, value);
-		ResultQueues._INSTANCE.addResult(key, value);
+		
+		String body = request.getReader().readLine();
+		logger.debug("A new value for {} ",body);
+		ResultQueues.getInstance().addResult(key, value);
 		doGet(request, response);
 	}
 
