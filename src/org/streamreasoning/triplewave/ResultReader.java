@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Servlet implementation class CSPARQLObserver
- */
 @WebServlet("/ResultReader")
 public class ResultReader extends HttpServlet {
 	private static final long serialVersionUID = 8371168544475096286L;
