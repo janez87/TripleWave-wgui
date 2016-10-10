@@ -17,7 +17,9 @@ public class ResultReader extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String key = request.getParameter("key");
+		logger.debug("Requested data for {}", key);
 		String result = ResultQueues._INSTANCE.pull(key);
+		logger.debug("Returning {}", result);
 		response.getWriter().print(result);
 	}
 

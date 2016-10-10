@@ -20,7 +20,7 @@ public class ResultWriter extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String key = request.getPathInfo().substring(1);
 		String value = request.getQueryString();
-		
+		logger.debug("A new value for {} has to be inserted: {}", key, value);
 		ResultQueues._INSTANCE.addResult(key, value);
 		doGet(request, response);
 	}
