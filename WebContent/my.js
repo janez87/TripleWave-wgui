@@ -2,7 +2,7 @@
 var rspAddress = "http://localhost:8175/streams";
 var queryAddress = "http://localhost:8175/queries";
 var observeryAddress = "http://localhost:8175/observer";
-var sgraphAddress = "http://131.175.141.249/TripleWave-transform/sgraph";
+var sgraphAddress = "http://localhost:4001/sgraph";
 var observerCallback = "http://localhost:8080/triplewave-wgui/ResultWriter"
 var resultUrl = "http://localhost:8080/triplewave-wgui/ResultReader"
 
@@ -91,7 +91,11 @@ var createResultDiv = function(queryName){
 	
 	var div = $('<div class="row"><div class="col-md-10 response"><h3>'+queryName+'</h3><textarea id="'+queryName+'"></textarea></div></div>');
 	
-	$('#responseContainer').append(div);
+	var existingDiv = $('#'+queryName);
+	
+	if(existingDiv[0]==null){	
+		$('#responseContainer').append(div);
+	}
 };
 
 var registerQuery = function () {
@@ -128,19 +132,34 @@ var registerQuery = function () {
             	setInterval(getResults.bind(null,queryName),12000)
             })
             .fail(function (jqXHR, textStatus) {
-	            var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
-	            $('#query').html(error);
+            	createResultDiv(queryName);
+            	
+            	console.log(jqXHR)
+	            var error = "Error: " + jqXHR.responseText + "\nPlease raise you hand and wait for a tutor";
+	            $('#'+queryName).html(error);
 
             })    
         })
         .fail(function (jqXHR, textStatus) {
-            var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
-            $('#query').html(error);
+        	createResultDiv(queryName);
+        	
+        	console.log(jqXHR)
+            var error = "Error: " + jqXHR.responseText + "\nPlease raise you hand and wait for a tutor";
+            $('#'+queryName).html(error);
+
 
         })
     $('#query').html(queryContent);
 
 }
+
+/*var unregisterQuery = function(queryName){
+	
+	$.ajax({
+		url:queryAddres+'/'+queryName,
+		method:''
+	})
+}*/
 
 var results = {};
 var getResults = function(query){
