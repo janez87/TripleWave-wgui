@@ -2,7 +2,7 @@
 var rspAddress = "http://localhost:8175/streams";
 var queryAddress = "http://localhost:8175/queries";
 var observeryAddress = "http://localhost:8175/observer";
-var sgraphAddress = "http://localhost:4001/sgraph";
+var sgraphAddress = "http://131.175.141.249/TripleWave-transform/sgraph";
 var observerCallback = "http://localhost:8080/triplewave-wgui/ResultWriter"
 var resultUrl = "http://localhost:8080/triplewave-wgui/ResultReader"
 
@@ -171,12 +171,13 @@ var getResults = function(query){
 	})
 	.done(function(response){
 		console.log(response);
+		console.log(response.results);
 		if(!results[query]){
 			results[query] = []
 		}
 		
 		if(response){			
-			results[query].push(response);
+			results[query].concat(JSON.parse(response).results.bindings);
 		}
 		$('#'+query).html(results[query]);
 	})
