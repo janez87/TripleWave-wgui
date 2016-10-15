@@ -170,16 +170,17 @@ var getResults = function(query){
 		method:'GET'
 	})
 	.done(function(response){
-		console.log(response);
-		console.log(response.results);
 		if(!results[query]){
 			results[query] = []
 		}
 		
-		if(response){			
-			results[query].concat(JSON.parse(response).results.bindings);
+		if(response){		
+			console.log(JSON.parse(response).results.bindings)
+			results[query]=results[query].concat(JSON.parse(response).results.bindings);
 		}
-		$('#'+query).html(results[query]);
+		
+		console.log(results[query])
+		$('#'+query).html(JSON.stringify(results[query]));
 	})
 	.fail(function (jqXHR, textStatus) {
             var error = "Error: " + textStatus + "\nPlease raise you hand and wait for a tutor";
