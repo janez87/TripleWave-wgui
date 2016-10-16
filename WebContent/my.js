@@ -19,7 +19,18 @@ var queries = {
         "ORDER BY desc(?c) " +
         "LIMIT 15",
         
-		topPageWiki:""
+		topPageWiki:"REGISTER QUERY topPageWiki AS " +
+        "PREFIX prov:<http://www.w3.org/ns/prov#> " +
+        "PREFIX sc:<https://schema.org/> " +
+        "SELECT ?obj (COUNT(?t) AS ?c) " +
+        "FROM STREAM <http://131.175.141.249/TripleWave-transform/sgraph> [RANGE 1m STEP 1m] " +
+        "WHERE { " +
+        "?t sc:object ?obj " +
+        "FILTER (!contains(str(?obj), \"Special:Log\")) " +
+        "} " +
+        "GROUP BY ?obj " +
+        "ORDER BY desc(?c) " +
+        "LIMIT 15"
 };
 
 var load = function(query){
@@ -101,8 +112,8 @@ var createResultDiv = function(queryName){
 var registerQuery = function () {
     var queryName = $("#queryName")[0].value;
 
-    var queryContent =$('#query')[0].value.replace(/['"]+/g, '');
-    //var queryContent = queries[queryName]
+    //var queryContent =$('#query')[0].value.replace(/['"]+/g, '');
+    var queryContent = queries[queryName]
 
     console.log(queryContent)
     console.log(queryName)
@@ -174,7 +185,8 @@ var getResults = function(query){
 			results[query] = []
 		}
 		
-		if(response){		
+		
+		if(response && response!=="null"){		
 			console.log(JSON.parse(response).results.bindings)
 			results[query]=results[query].concat(JSON.parse(response).results.bindings);
 		}
