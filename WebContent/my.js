@@ -5,28 +5,20 @@ var sgraphAddress = "http://192.168.1.199:4000/sgraph";
 var observerCallback = "http://localhost:8080/triplewave-wgui/ResultWriter"
 var resultUrl = "http://localhost:8080/triplewave-wgui/ResultReader"
 
-var queries = {
-	query1 : "REGISTER STREAM query1 AS"
-			+ "PREFIX lbdc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/>"
-			+ "SELECT DISTINCT ?p"
-			+ "FROM STREAM <http://192.168.1.199/sgraph> [RANGE 30s SLIDE 30s]"
-			+ "WHERE{" + "?p rdf:type lbdc:Person",
+var correctQueries = {
+	query1 : "REGISTER QUERY query1 AS PREFIX ldbc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/> SELECT DISTINCT ?p FROM STREAM <http://192.168.1.199:4000/sgraph> [RANGE 30s STEP 30s] WHERE {?p a ldbc:Person }",
 
-	query2 : "SELECT DISTINCT ?p, COUNT(*) AS ?f"
-			+ "FROM STREAM <http://192.168.1.199/sgraph> [60s, 10s]" + "WHERE{"
-			+ "?a :follows ?p" + "}" + "GROUP BY ?p" + "ORDER BY ?f DESC"
-			+ "LIMIT 5",
+	query2 : "REGISTER QUERY query2 AS PREFIX ldbc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/> SELECT DISTINCT ?p (COUNT(*) AS ?f) FROM STREAM <http://192.168.1.199:4000/sgraph> [ RANGE 60s STEP 10s] WHERE { ?a ldbc:follows ?p} GROUP BY ?p ORDER BY DESC(?f)  LIMIT 5",
 
-	query3 : "SELECT ?t COUNT(*) as ?total"
-			+ "FROM STREAM <http://192.168.1.199/sgraph> [60s, 10s]" + "WHERE{"
-			+ "{ ?c :hasTag ?t }" + "UNION" + "{ ?f :hasTag ?t}}"
-			+ "GROUP BY ?t" + "ORDER BY ?total DESC" + "LIMIT 5",
-
-	query4 : "SELECT DISTINCT ?p"
-			+ "FROM STREAM <http://192.168.1.199/sgraph> [30s, 30s]" + "WHERE{"
-			+ "GRAPH ?g { ?p rdf:type :Person }" + "?g rdf:type AddPerson"
+	query3 : "REGISTER QUERY query3 AS PREFIX ldbc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/> SELECT ?t (COUNT(*) as ?total) FROM STREAM <http://192.168.1.199:4000/sgraph> [RANGE 60s STEP 10s] WHERE { { ?c ldbc:hasTag ?t } UNION { ?f ldbc:hasInterest ?t}} GROUP BY ?t ORDER BY DESC(?total) LIMIT 5",
 
 };
+
+var queries = {
+	query1 : "PREFIX ldbc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/> SELECT DISTINCT ?p FROM STREAM <http://192.168.1.199:4000/sgraph> [RANGE 30s STEP 30s] WHERE {?p a ldbc:Person }",
+	query2 : "REGISTER QUERY query2 AS PREFIX ldbc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/> SELECT DISTINCT ?p (COUNT(*) AS ?f) FROM STREAM <http://192.168.1.199:4000/sgraph> WHERE { ?a ldbc:follows ?p} GROUP BY ?p ORDER BY DESC(?f)  LIMIT 5",
+	query3 : "REGISTER QUERY query3 AS PREFIX ldbc:<http://www.ldbc.eu/ldbc_socialnet/1.0/vocabulary/> SELECT ?t (COUNT(*) as ?total) FROM STREAM <http://192.168.1.199:4000/sgraph> [RANGE 60s STEP 10s] WHERE { { ?c ldbc:hasTag ?t } UNION { ?f ldbc:hasInterest ?t}} ORDER BY DESC(?total) LIMIT 5",
+}
 
 var load = function(query) {
 
@@ -172,7 +164,7 @@ var registerQuery = function() {
 var results = {};
 var getResults = function(query) {
 
-	console.log(query)
+	console.log("Getting the results for query: "+query)
 	$.ajax({
 		url : resultUrl + '?key=' + query,
 		method : 'GET'
@@ -181,10 +173,10 @@ var getResults = function(query) {
 			results[query] = []
 		}
 
-		if (response) {
-			results[query].concat(JSON.parse(response).results.bindings);
+		if (response && response!=="null") {
+			results[query] = results[query].concat(JSON.parse(response).results.bindings);
 		}
-		$('#' + query).html(results[query]);
+		$('#' + query).html(JSON.stringify(results[query]));
 	}).fail(
 			function(jqXHR, textStatus) {
 				var error = "Error: " + textStatus
