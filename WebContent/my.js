@@ -89,7 +89,7 @@ var registerStream = function () {
         .fail(function (jqXHR, textStatus) {
             console.log(jqXHR)
             var error = "Error: " + jqXHR.responseText + "\nPlease raise you hand and wait for us";
-            $('#response').html(error);
+            alert(error);
 
         })
 
@@ -139,11 +139,13 @@ var registerQuery = function () {
             })
             .done(function(response){
             	createResultDiv(queryName);
+            	$('#'+queryName).html("Registering the query and waiting for results");
             
             	setInterval(getResults.bind(null,queryName),12000)
             })
             .fail(function (jqXHR, textStatus) {
             	createResultDiv(queryName);
+            	$('#'+queryName).html("Registering the query and waiting for results");
             	
             	console.log(jqXHR)
 	            var error = "Error: " + jqXHR.responseText + "\nPlease raise you hand and wait for a tutor";
@@ -153,6 +155,7 @@ var registerQuery = function () {
         })
         .fail(function (jqXHR, textStatus) {
         	createResultDiv(queryName);
+        	$('#'+queryName).html("Registering the query and waiting for results");
         	
         	console.log(jqXHR)
             var error = "Error: " + jqXHR.responseText + "\nPlease raise you hand and wait for a tutor";
@@ -160,7 +163,6 @@ var registerQuery = function () {
 
 
         })
-    $('#query').html(queryContent);
 
 }
 
