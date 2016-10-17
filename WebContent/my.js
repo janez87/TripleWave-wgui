@@ -130,14 +130,15 @@ var registerQuery = function() {
 								.done(
 										function(response) {
 											createResultDiv(queryName);
-
+											$('#'+queryName).html("Registering tje query and waiting for results");
+											
 											setInterval(getResults.bind(null,
 													queryName), 12000)
 										})
 								.fail(
 										function(jqXHR, textStatus) {
 											createResultDiv(queryName);
-
+											
 											console.log(jqXHR)
 											var error = "Error: "
 													+ jqXHR.responseText
@@ -157,27 +158,29 @@ var registerQuery = function() {
 						$('#' + queryName).html(error);
 
 					})
-	$('#query').html(queryContent);
+	;
 
 }
 
 var results = {};
 var getResults = function(query) {
 
-	console.log("Getting the results for query: "+query)
+	console.log("Getting the results for query: " + query)
 	$.ajax({
 		url : resultUrl + '?key=' + query,
 		method : 'GET'
-	}).done(function(response) {
-		if (!results[query]) {
-			results[query] = []
-		}
+	}).done(
+			function(response) {
+				if (!results[query]) {
+					results[query] = []
+				}
 
-		if (response && response!=="null") {
-			results[query] = results[query].concat(JSON.parse(response).results.bindings);
-		}
-		$('#' + query).html(JSON.stringify(results[query]));
-	}).fail(
+				if (response && response !== "null") {
+					results[query] = results[query]
+							.concat(JSON.parse(response).results.bindings);
+				}
+				$('#' + query).html(JSON.stringify(results[query]));
+			}).fail(
 			function(jqXHR, textStatus) {
 				var error = "Error: " + textStatus
 						+ "\nPlease raise you hand and wait for a tutor";
