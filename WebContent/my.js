@@ -48,21 +48,32 @@ var clearFields = function(){
 	$("#query").html("")
 	$("#queryName")[0].value = "";
 }
+var data = [];
 var initStream = function () {
-    var data = [];
 
     var twAddress = $('#twUrl')[0].value;
-    var ws = new WebSocket(twAddress);
+    var ws = new ReconnectingWebSocket(twAddress);
 
     var $stream = $('#stream');
     ws.addEventListener('message', function (message) {
 
         if (data.length > 20) {
-            data.shift();
+            var deleted = data.shift()
+            var id = deleted["@id"].split("/")
+            id = id[id.length-1]
+            $stream.find("#"+id).remove()
         }
-
-        data.push(message.data)
-        $stream[0].value = data.join('\n');
+        
+        var element = JSON.parse(message.data)
+        var graphDiv = $('<div></div>')
+        var id = element["@id"].split("/")
+        id = id[id.length-1]
+        graphDiv.attr("id",id)
+        graphDiv.addClass("col-md-12")
+        graphDiv.addClass("stream-element")
+        graphDiv.text(message.data)
+        data.push(element)
+        $stream.append(graphDiv)
     })
 
     registerStream();

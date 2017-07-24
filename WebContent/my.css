@@ -15,3 +15,11 @@
 #query{
     width:100%;
 }
+
+.stream-element{
+    position: relative;
+    min-height: 51px;
+    padding: 9px 12px;
+    border-bottom: 1px solid #e6ecf0;
+    cursor: pointer;
+}

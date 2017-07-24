@@ -2,7 +2,7 @@
 
 <head>
     <script src="scripts/jquery.min.js"></script>
-    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/reconnecting-webscoket.js"></script>
     <!-- Latest compiled and minified CSS -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous"> -->
@@ -53,11 +53,11 @@
         <div class="row">
             <div class="col-md-10" id="tw-stream">
                 <h3> TripleWave Stream</h3>
-                <textarea id="stream">
-                </textarea>
+                <div class="row well well-sm pre-scrollable" id="stream">
+                </div>
                 <h5> TripleWave Websocket Address</h5>
                 <div class="input-group">
-                    <input id="twUrl" type="text" class="form-control" placeholder="TripleWave URL." value="ws://131.175.141.249/TripleWave-transform/ws/stream">
+                    <input id="twUrl" type="text" class="form-control" placeholder="TripleWave URL." value="ws://localhost:8124/tw/stream">
                     <span class="input-group-btn">
                         <button id="startStream" onclick="initStream()" class="btn btn-default" type="button">Start Stream</button>
                     </span>
